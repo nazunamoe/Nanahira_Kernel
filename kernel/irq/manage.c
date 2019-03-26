@@ -1200,6 +1200,7 @@ static void affine_one_perf_irq(struct irq_desc *desc)
 	int cpu;
 
 	/* Balance the performance-critical IRQs across all perf CPUs */
+	get_online_cpus();
 	while (1) {
 		cpu = cpumask_next_and(perf_cpu_index, cpu_perf_mask,
 				       cpu_online_mask);
@@ -1208,6 +1209,7 @@ static void affine_one_perf_irq(struct irq_desc *desc)
 		perf_cpu_index = -1;
 	}
 	irq_set_affinity_locked(&desc->irq_data, cpumask_of(cpu), true);
+	put_online_cpus();
 
 	perf_cpu_index = cpu;
 }
@@ -1240,6 +1242,8 @@ void irq_set_perf_affinity(unsigned int irq)
 	raw_spin_unlock_irqrestore(&desc->lock, flags);
 }
 
+=======
+>>>>>>> 3d7e05bb03b8a... kernel: Improve performance critical IRQ framework
 void unaffine_perf_irqs(void)
 {
 	struct irq_desc_list *data;
@@ -1537,8 +1541,13 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 			irqd_set(&desc->irq_data, IRQD_NO_BALANCING);
 		}
 
-		if (new->flags & IRQF_PERF_CRITICAL)
-			setup_perf_irq_locked(desc);
+		if (new->flags & IRQF_PERF_CRITICAL) {
+			add_desc_to_perf_list(desc);
+			irqd_set(&desc->irq_data, IRQD_AFFINITY_MANAGED);
+			raw_spin_lock(&perf_irqs_lock);
+			affine_one_perf_irq(desc);
+			raw_spin_unlock(&perf_irqs_lock);
+		}		
 
 		if (irq_settings_can_autoenable(desc)) {
 			irq_startup(desc, IRQ_RESEND, IRQ_START_COND);
