@@ -1986,3 +1986,4 @@ static inline unsigned long map_util_freq(unsigned long util,
 {
 	return (freq + (freq >> 2)) * util / cap;
 }
+#endif
