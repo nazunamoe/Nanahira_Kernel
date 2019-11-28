@@ -26,6 +26,10 @@
 #include "dsi_parser.h"
 #include "dsi_panel_mi.h"
 
+#ifdef CONFIG_KLAPSE
+#include <linux/klapse.h>
+#endif
+
 /**
  * topology is currently defined by a set of following 3 values:
  * 1. num of layer mixers
