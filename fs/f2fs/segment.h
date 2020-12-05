@@ -3,7 +3,7 @@
  * fs/f2fs/segment.h
  *
  * Copyright (c) 2012 Samsung Electronics Co., Ltd.
- * Copyright (C) 2020 XiaoMi, Inc.
+ *             http://www.samsung.com/
  */
 #include <linux/blkdev.h>
 #include <linux/backing-dev.h>
