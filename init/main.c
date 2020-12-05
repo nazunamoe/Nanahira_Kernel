@@ -553,10 +553,6 @@ asmlinkage __visible void __init start_kernel(void)
 	page_alloc_init();
 
 	pr_notice("Kernel command line: %s\n", boot_command_line);
-<<<<<<< HEAD
-	/* parameters may set static keys */
-	jump_label_init();
-=======
 
 	p = NULL;
 	p= strnstr(command_line, "androidboot.fpsensor=fpc", strlen(command_line));
@@ -568,7 +564,8 @@ asmlinkage __visible void __init start_kernel(void)
 		printk("I am goodix fingerprint  --syhg");
 	}
 
->>>>>>> xiaomi
+	/* parameters may set static keys */
+	jump_label_init();
 	parse_early_param();
 	after_dashes = parse_args("Booting kernel",
 				  static_command_line, __start___param,
