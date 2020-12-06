@@ -843,12 +843,9 @@ static bool a6xx_gmu_gx_is_on(struct adreno_device *adreno_dev)
 static bool a6xx_gmu_cx_is_on(struct kgsl_device *device)
 {
 	unsigned int val;
-	struct gmu_device *gmu = KGSL_GMU_DEVICE(device);
 
-	if (device->state != KGSL_STATE_RESET &&
-		ADRENO_QUIRK(ADRENO_DEVICE(device),
-		ADRENO_QUIRK_CX_GDSC))
-		return regulator_is_enabled(gmu->cx_gdsc);
+	if (ADRENO_QUIRK(ADRENO_DEVICE(device), ADRENO_QUIRK_CX_GDSC))
+		return regulator_is_enabled(KGSL_GMU_DEVICE(device)->cx_gdsc);
 
 	gmu_core_regread(device, A6XX_GPU_CC_CX_GDSCR, &val);
 	return (val & BIT(31));
@@ -1220,6 +1217,8 @@ static int a6xx_gmu_suspend(struct kgsl_device *device)
 
 	/* Check no outstanding RPMh voting */
 	a6xx_complete_rpmh_votes(device);
+
+	gmu_core_regwrite(device, A6XX_GMU_CM3_SYSRESET, 1);
 
 	/*
 	 * This is based on the assumption that GMU is the only one controlling
