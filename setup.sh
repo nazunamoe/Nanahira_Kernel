@@ -44,5 +44,5 @@ cd /home/nazunamoe/anykernel2
 FORMAT="%Y%m%d-%H%M"
 _DATE=$(date +"$FORMAT" )
 
-zip -r "Nanahira_Kernel_POCOX3_Baseline1.1_${_DATE}.zip" * --exclude *.zip
+zip -r "Nanahira_Kernel_POCOX3_Baseline1.2_${_DATE}.zip" * --exclude *.zip
 cd /home/nazunamoe/kernel_temp
