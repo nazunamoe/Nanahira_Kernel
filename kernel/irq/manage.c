@@ -1244,8 +1244,6 @@ void irq_set_perf_affinity(unsigned int irq)
 	raw_spin_unlock_irqrestore(&desc->lock, flags);
 }
 
-=======
->>>>>>> 3d7e05bb03b8a... kernel: Improve performance critical IRQ framework
 void unaffine_perf_irqs(void)
 {
 	struct irq_desc_list *data;
